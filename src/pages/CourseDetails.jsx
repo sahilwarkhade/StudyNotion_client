@@ -11,22 +11,29 @@ import RatingStars from "../components/common/RatingStars"
 import CourseAccordionBar from "../components/core/Course/CourseAccordionBar"
 import CourseDetailsCard from "../components/core/Course/CourseDetailsCard"
 import { formatDate } from "../services/formatDate"
-import { fetchCourseDetails } from "../services/operations/courseDetailsAPI"
+import { fetchCourseDetails, getFullDetailsOfCourse } from "../services/operations/courseDetailsAPI"
 import { buyCourse } from "../services/operations/studentFeaturesAPI"
 import GetAvgRating from "../utils/avgRating"
 import Error from "./Error"
+import { addToCart } from "../slices/cartSlice"
 
 function CourseDetails() {
   const { user } = useSelector((state) => state.profile)
   const { token } = useSelector((state) => state.auth)
   const { loading } = useSelector((state) => state.profile)
   const { paymentLoading } = useSelector((state) => state.course)
+  const {}=useSelector((state)=>state.cart)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   // Getting courseId from url parameter
   const { courseId } = useParams()
   // console.log(`course id: ${courseId}`)
+
+  const addToCarts=async()=>{
+    let course=await fetchCourseDetails(courseId);
+    dispatch(addToCart(course?.data?.courseDetails))
+  }
 
   // Declear a state to save the course details
   const [response, setResponse] = useState(null)
@@ -177,7 +184,7 @@ function CourseDetails() {
               <button className="yellowButton" onClick={handleBuyCourse}>
                 Buy Now
               </button>
-              <button className="blackButton">Add to Cart</button>
+              <button className="blackButton" onClick={addToCarts}>Add to Cart</button>
             </div>
           </div>
           {/* Courses Card */}

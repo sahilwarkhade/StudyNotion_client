@@ -16,14 +16,14 @@ const Course_Card = ({course, Height}) => {
 
     
   return (
-    <>
+    <div className='max-md:w-80 max-md:ml-4'>
       <Link to={`/courses/${course._id}`}>
         <div className="">
           <div className="rounded-lg">
             <img
               src={course?.thumbnail}
               alt="course thumnail"
-              className={`${Height} w-full rounded-xl object-cover `}
+              className={`h-72 w-full rounded-xl object-cover`}
             />
           </div>
           <div className="flex flex-col gap-2 px-1 py-3">
@@ -42,7 +42,7 @@ const Course_Card = ({course, Height}) => {
           </div>
         </div>
       </Link>
-    </>
+    </div>
   )
 }
 

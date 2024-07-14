@@ -23,6 +23,7 @@ export function getUserDetails(token, navigate) {
       const userImage = response.data.data.image
         ? response.data.data.image
         : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.data.firstName} ${response.data.data.lastName}`
+      console.log("RESPONSE:::",response);
       dispatch(setUser({ ...response.data.data, image: userImage }))
     } catch (error) {
       dispatch(logout(navigate))
@@ -79,8 +80,8 @@ export async function getInstructorData(token) {
 
   }
   catch(error) {
-    console.log("GET_INSTRUCTOR_API ERROR", error);
-    toast.error("Could not Get Instructor Data")
+    // console.log("GET_INSTRUCTOR_API ERROR", error);
+    // toast.error("Could not Get Instructor Data")
   }
   toast.dismiss(toastId);
   return result;

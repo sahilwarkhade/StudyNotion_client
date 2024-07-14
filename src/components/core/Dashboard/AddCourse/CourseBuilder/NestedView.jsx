@@ -51,7 +51,7 @@ export default function NestedView({ handleChangeEditSectionName }) {
   }
 
   return (
-    <>
+    <div className="max-sm:ml-6">
       <div
         className="rounded-lg bg-richblack-700 p-6 px-8"
         id="nestedViewContainer"
@@ -179,6 +179,6 @@ export default function NestedView({ handleChangeEditSectionName }) {
       ) : (
         <></>
       )}
-    </>
+    </div>
   )
 }

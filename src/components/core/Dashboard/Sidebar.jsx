@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom"
 import { sidebarLinks } from "../../../data/dashboard-links"
 import { logout } from "../../../services/operations/authAPI"
 import ConfirmationModal from "../../common/ConfirmationModal"
-import SidebarLink from "./SidebarLink"
+import SidebarLink from "./SidebarLink";
+import { FaArrowAltCircleLeft,FaArrowAltCircleRight } from "react-icons/fa";
 
 export default function Sidebar() {
   const { user, loading: profileLoading } = useSelector(
@@ -17,6 +18,7 @@ export default function Sidebar() {
   const navigate = useNavigate()
   // to keep track of confirmation modal
   const [confirmationModal, setConfirmationModal] = useState(null)
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   if (profileLoading || authLoading) {
     return (
@@ -26,9 +28,15 @@ export default function Sidebar() {
     )
   }
 
+
+  const handleSidebarOpen = (e) => {
+    e.stopPropagation()
+    setIsSideBarOpen(prev=>!prev)
+  };
   return (
     <>
-      <div className="flex h-[calc(100vh-3.5rem)] min-w-[220px] flex-col border-r-[1px] border-r-richblack-700 bg-richblack-800 py-10">
+      
+      <div className={"flex h-[calc(100vh-3.5rem)] min-w-[220px] flex-col border-r-[1px] border-r-richblack-700 bg-richblack-800 py-10 max-md:absolute "+(isSideBarOpen ? "max-md:left-0 max-md:top-0" :"max-md:-left-48 max-md:top-0")+ " transition-all duration-300 z-40"}>
         <div className="flex flex-col">
           {sidebarLinks.map((link) => {
             if (link.type && user?.accountType !== link.type) return null
@@ -63,6 +71,12 @@ export default function Sidebar() {
           </button>
         </div>
       </div>
+
+      <button className={"md:hidden absolute top-3 " + (isSideBarOpen ? "left-48" :  "left-0.5") + " text-white transition-all duration-300 z-40 "} onClick={handleSidebarOpen}>
+           {/* <BsChevronDoubleRight /> */}
+           {isSideBarOpen ? <FaArrowAltCircleLeft className="text-2xl"/> :<FaArrowAltCircleRight className="text-2xl"/>}
+      </button>
+      
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </>
   )

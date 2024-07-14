@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
+import { ImCross } from "react-icons/im";
 import { BsChevronDown } from "react-icons/bs"
 import { useSelector } from "react-redux"
 import { Link, matchPath, useLocation } from "react-router-dom"
@@ -10,6 +11,7 @@ import { apiConnector } from "../../services/apiconnector"
 import { categories } from "../../services/apis"
 import { ACCOUNT_TYPE } from "../../utils/constants"
 import ProfileDropdown from "../core/Auth/ProfileDropDown"
+import { SideNavbar } from "./SideNavbar";
 
 function Navbar() {
   const { token } = useSelector((state) => state.auth)
@@ -17,8 +19,10 @@ function Navbar() {
   const { totalItems } = useSelector((state) => state.cart)
   const location = useLocation()
 
-  const [subLinks, setSubLinks] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [subLinks, setSubLinks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [sideBarOpen, setSideBarOpen] = useState(false);
 
   useEffect(() => {
     ;(async () => {
@@ -36,7 +40,8 @@ function Navbar() {
   // console.log("sub links", subLinks)
 
   const matchRoute = (route) => {
-    return matchPath({ path: route }, location.pathname)
+    return matchPath({ path: route }, location.pathname) 
+    // matchPath function is used to match two paths here the two paths are one is that we are sending and another is corrent path on which page the user is
   }
 
   return (
@@ -112,6 +117,8 @@ function Navbar() {
             ))}
           </ul>
         </nav>
+
+        
         {/* Login / Signup / Dashboard */}
         <div className="hidden items-center gap-x-4 md:flex">
           {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
@@ -140,12 +147,17 @@ function Navbar() {
           )}
           {token !== null && <ProfileDropdown />}
         </div>
-        <button className="mr-4 md:hidden">
-          <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
+        <button className="mr-4 md:hidden" onClick={()=>{setSideBarOpen(prev=>!prev)}}>
+          { 
+            !sideBarOpen ? <AiOutlineMenu fontSize={24} fill="#AFB2BF" className="pointer-events-none"/> 
+            : <ImCross fontSize={24} fill="#AFB2BF" className="pointer-events-none z-60"/>
+          }
         </button>
+        {
+          sideBarOpen && <SideNavbar isOpen={setSideBarOpen} subLinks={subLinks}/>
+        }
       </div>
     </div>
   )
 }
-
 export default Navbar
